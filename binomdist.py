@@ -10,7 +10,7 @@ def main():
   transmit_percent = 10
   user_count = 35
   user_limit = 10
-  print(' n   P(x=n)   P(x<=n)    P(x>n)')
+  print(' n   P(x=n)    P(x≤n)    P(x>n)')
   m = user_count
   p = transmit_percent / 100
   for index, valtriple in enumerate([(binom_dist_eq  (m,k,p),
