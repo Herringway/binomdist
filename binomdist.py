@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys
+import itertools
 from scipy.stats import binom
 
 def main():
@@ -10,17 +11,21 @@ def main():
   usercount = 35
   userlimit = 10
   print(' n   P(x=n)   P(x<=n)    P(x>n)')
-  for users in range(0,userlimit+1):
-    print('%02d %09.6f %09.6f %09.6f' % (users, binomDistEq(transmitpercent / 100, users, usercount), binomDistLtEq(transmitpercent / 100, users, usercount), binomDistGt(transmitpercent / 100, users, usercount)))
+  m = usercount
+  p = transmitpercent / 100
+  for k,valtriple in enumerate([(binom_dist_eq  (m,k,p),
+                                 binom_dist_lteq(m,k,p),
+                                 binom_dist_gt  (m,k,p)) for k in range(0, userlimit+1)]):
+    print('%02d' % k, '%09.6f %09.6f %09.6f' % valtriple)
 
-def binomDistEq(probability, trials, arg3):
-  return binom.pmf(trials, arg3, probability)
+def binom_dist_eq(successes, trials, probability):
+  return binom.pmf(trials, successes, probability)
 
-def binomDistLtEq(probability, trials, arg3):
-  return binom.cdf(trials, arg3, probability)
+def binom_dist_lteq(successes, trials, probability):
+  return binom.cdf(trials, successes, probability)
 
-def binomDistGt(probability, trials, arg3):
-  return 1.0-binomDistLtEq(probability, trials, arg3)
+def binom_dist_gt(successes, trials, probability):
+  return 1.0-binom_dist_lteq(successes, trials, probability)
 
 if __name__ == '__main__':
   main()
